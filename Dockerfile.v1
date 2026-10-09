@@ -1,0 +1,9 @@
+FROM python:3.12-alpine
+WORKDIR /shym-rent
+COPY . .
+RUN python tools/build_report.py
+ENV REPORT_FILE="out/report.json"
+ENV BRANCH="Shymbulak"
+ENV TOP="5"
+EXPOSE 8080
+CMD ["python", "app/server.py"]

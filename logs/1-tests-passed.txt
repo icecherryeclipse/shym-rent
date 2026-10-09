@@ -1,6 +1,0 @@
-test_amount_is_hours_times_tariff (test_data.TestData.test_amount_is_hours_times_tariff) ... ok
-
-----------------------------------------------------------------------
-Ran 1 test in 0.000s
-
-OK
