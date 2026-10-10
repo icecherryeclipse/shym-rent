@@ -1,0 +1,53 @@
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+Sending build context to Docker daemon  149.5kB
+Step 1/18 : FROM python:3.12-alpine AS build
+ ---> 4c47124a8391
+Step 2/18 : WORKDIR /src
+ ---> Using cache
+ ---> f624ddde17e3
+Step 3/18 : COPY tools/ tools/
+ ---> Using cache
+ ---> 661ce557dc59
+Step 4/18 : COPY data/ data/
+ ---> 99de24408fd0
+Step 5/18 : RUN python tools/build_report.py
+ ---> Running in bd242f9a40e8
+out/report.json готов: 36 записей, контрольный код 1EA207A0
+ ---> Removed intermediate container bd242f9a40e8
+ ---> f5ae2e56b38b
+Step 6/18 : FROM python:3.12-alpine AS test
+ ---> 4c47124a8391
+Step 7/18 : COPY --from=build /src /src
+ ---> b2b560fdd809
+Step 8/18 : WORKDIR /src
+ ---> Running in 79c30c5409b6
+ ---> Removed intermediate container 79c30c5409b6
+ ---> de171f377e5d
+Step 9/18 : COPY tests/ tests/
+ ---> c4aad5491888
+Step 10/18 : RUN python -m unittest discover -s tests -v
+ ---> Running in ff5a82ff1e36
+[91mtest_amount_is_hours_times_tariff (test_data.DataRulesTest.test_amount_is_hours_times_tariff) ... [0m[91m
+  test_amount_is_hours_times_tariff (test_data.DataRulesTest.test_amount_is_hours_times_tariff) (line=37) ... FAIL
+[0m[91mtest_columns (test_data.DataRulesTest.test_columns) ... ok
+[0m[91mtest_hours_between_1_and_10 (test_data.DataRulesTest.test_hours_between_1_and_10) ... [0m[91mok
+test_own_records_added (test_data.DataRulesTest.test_own_records_added) ... ok
+test_report_created (test_data.DataRulesTest.test_report_created) ... [0m[91mok
+test_tariff_from_price_list (test_data.DataRulesTest.test_tariff_from_price_list) ... [0m[91mok
+
+======================================================================
+[0m[91mFAIL: test_amount_is_hours_times_tariff (test_data.DataRulesTest.test_amount_is_hours_times_tariff) (line=37)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/src/tests/test_data.py", line 40, in test_amount_is_hours_times_tariff
+    self.assertEqual(int(r["amount"]), int(r["hours"]) * int(r["tariff"]))
+AssertionError: 9000 != 6000
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.004s
+
+FAILED (failures=1)
+[0mThe command '/bin/sh -c python -m unittest discover -s tests -v' returned a non-zero code: 1
