@@ -1,0 +1,60 @@
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+Sending build context to Docker daemon  167.9kB
+Step 1/18 : FROM python:3.12-alpine AS build
+ ---> 4c47124a8391
+Step 2/18 : WORKDIR /src
+ ---> Using cache
+ ---> f624ddde17e3
+Step 3/18 : COPY tools/ tools/
+ ---> Using cache
+ ---> 661ce557dc59
+Step 4/18 : COPY data/ data/
+ ---> Using cache
+ ---> 18c7ca9fbf15
+Step 5/18 : RUN python tools/build_report.py
+ ---> Using cache
+ ---> a180d10ea60d
+Step 6/18 : FROM python:3.12-alpine AS test
+ ---> 4c47124a8391
+Step 7/18 : COPY --from=build /src /src
+ ---> Using cache
+ ---> b7a24d17a37b
+Step 8/18 : WORKDIR /src
+ ---> Using cache
+ ---> a914a9f92c7c
+Step 9/18 : COPY tests/ tests/
+ ---> Using cache
+ ---> 9a0cc3611da3
+Step 10/18 : RUN python -m unittest discover -s tests -v
+ ---> Using cache
+ ---> 5ca12a6523e8
+Step 11/18 : FROM python:3.12-alpine
+ ---> 4c47124a8391
+Step 12/18 : WORKDIR /shym-rent
+ ---> Using cache
+ ---> d6a4014bdc58
+Step 13/18 : COPY app/server.py .
+ ---> dfbbb96ac4f5
+Step 14/18 : COPY --from=test /src/out/report.json .
+ ---> be6abb33d4db
+Step 15/18 : ENV BRANCH="Shymbulak"
+ ---> Running in b549644d8cca
+ ---> Removed intermediate container b549644d8cca
+ ---> 70730b8b4e70
+Step 16/18 : ENV TOP="5"
+ ---> Running in 5bb7aa1691c9
+ ---> Removed intermediate container 5bb7aa1691c9
+ ---> 8c3f5e379999
+Step 17/18 : EXPOSE 8080
+ ---> Running in 82cdfee24292
+ ---> Removed intermediate container 82cdfee24292
+ ---> ecbda553c6ca
+Step 18/18 : CMD ["python", "server.py"]
+ ---> Running in abda9e913274
+ ---> Removed intermediate container abda9e913274
+ ---> 99b34d40c776
+Successfully built 99b34d40c776
+Successfully tagged shym-rent:v3
