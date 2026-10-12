@@ -1,0 +1,9 @@
+.git
+.gitignore
+logs/
+tests/__pycache__/
+out/
+web/
+README.md
+dashboard.png
+dashboard.jpg
